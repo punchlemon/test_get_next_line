@@ -16,7 +16,7 @@ GNL_DIR			=	../
 SRC_DIR			=	src/
 OBJ_DIR			=	obj/
 CC				=	cc
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror# -fsanitize=address,undefined -g
 IFLAGS			=	-I$(INCLUDE) -I$(GNL_DIR)
 RM				=	rm -f
 AR				=	ar rcs
@@ -36,10 +36,19 @@ MAGENTA			=	\033[0;95m
 CYAN			=	\033[0;96m
 WHITE			=	\033[0;97m
 
-SRC_FILES		=	$(notdir $(basename $(wildcard $(SRC_DIR)*.c)))
-SRC_FILES		+=	$(notdir $(basename $(wildcard $(GNL_DIR)*.c)))
-SRC				=	$(wildcard $(SRC_DIR)*.c)
-SRC				=	$(wildcard $(GNL_DIR)*.c)
+TEST_SRC_FILES	=	 \
+					main \
+
+GNL_SRC_FILES	=	 \
+					get_next_line \
+					get_next_line_utils \
+
+SRC_FILES		=	 \
+					$(TEST_SRC_FILES) \
+					$(GNL_SRC_FILES) \
+
+SRC				+=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(TEST_SRC_FILES)));
+SRC				+=	$(addprefix $(GNL_DIR), $(addsuffix .c, $(GNL_SRC_FILES)));
 OBJ				=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 OBJ_DIR_FLAG	=	.obj_dir_exists
 
